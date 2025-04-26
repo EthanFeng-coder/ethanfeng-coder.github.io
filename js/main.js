@@ -769,6 +769,18 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   }
 });
 
+function openChatbotModal() {
+  document.getElementById('chatbotModal').classList.remove('hidden');
+}
 
+function closeChatbotModal() {
+  document.getElementById('chatbotModal').classList.add('hidden');
+}
 
-
+function openChatbotPopup() {
+  window.open(
+    'rag.html',   // your chatbot page
+    'ChatbotWindow',   // popup window name
+    'width=800,height=900,resizable=yes,scrollbars=yes'
+  );
+}
