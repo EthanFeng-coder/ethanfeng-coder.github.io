@@ -55,7 +55,7 @@
     document.getElementById('suggestions').style.display = "none"; // Hide suggestions once clicked
   };
 });
-    let socket = new WebSocket("ws://localhost:9001/ws");
+    let socket = new WebSocket("ws://64.49.14.78:19001/ws");
     let currentBotBubble = null;
     let thinkingActive = false;
     let thinkingWrapper = null;
@@ -84,7 +84,7 @@
 
     
     socket.onmessage = function(event) {
-    //console.log("Server:", event.data);
+    console.log("Server:", event.data);
 
   if (event.data === "[DONE]") {
     if (currentBotBubble && botMarkdownBuffer) {
