@@ -40,9 +40,13 @@
 
     <div class="relative z-10 flex items-center p-2 border-t bg-white/80">
       <input id="user-input" type="text" placeholder="Type a message..." class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300">
-      <button id="send-btn" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">
-        Send
-      </button>
+      <button id="send-btn" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+        <span id="send-btn-text">Send</span>
+        <svg id="send-btn-loading" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+        </svg>
+      </button>      
     </div>
   </div>
 
@@ -55,7 +59,7 @@
     document.getElementById('suggestions').style.display = "none"; // Hide suggestions once clicked
   };
 });
-    let socket = new WebSocket("wss://volvo-exam-too-diameter.trycloudflare.com/ws");
+    let socket = new WebSocket("ws://volvo-exam-too-diameter.trycloudflare.com/ws");
     let currentBotBubble = null;
     let thinkingActive = false;
     let thinkingWrapper = null;
@@ -93,6 +97,7 @@
     }
     botMarkdownBuffer = "";
     currentBotBubble = null;
+    setSendingState(false);
     return;
   }
 
@@ -182,7 +187,21 @@
     
       return { wrapper, text: bubble };
     }
-    
+    function setSendingState(isSending) {
+  const sendBtn = document.getElementById('send-btn');
+  const sendText = document.getElementById('send-btn-text');
+  const sendLoading = document.getElementById('send-btn-loading');
+
+  if (isSending) {
+    sendBtn.disabled = true;
+    sendText.classList.add('hidden');
+    sendLoading.classList.remove('hidden');
+  } else {
+    sendBtn.disabled = false;
+    sendText.classList.remove('hidden');
+    sendLoading.classList.add('hidden');
+  }
+}
     function sendQuery() {
       const input = document.getElementById('user-input');
       const userMessage = input.value.trim();
@@ -200,9 +219,8 @@
       const message = {
         user_query: userMessage,
         ip: userIpInfo,
-        type: "init",
-        require_ip: True
       };
+      setSendingState(true);
       socket.send(JSON.stringify(message));
     
       input.value = "";
@@ -219,6 +237,7 @@
         sendQuery();
       }
     });
+    
     </script>    
     
 </body>
