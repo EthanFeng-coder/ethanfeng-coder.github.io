@@ -55,7 +55,7 @@
     document.getElementById('suggestions').style.display = "none"; // Hide suggestions once clicked
   };
 });
-    let socket = new WebSocket("wss://volvo-exam-too-diameter.trycloudflare.com /ws");
+    let socket = new WebSocket("wss://volvo-exam-too-diameter.trycloudflare.com/ws");
     let currentBotBubble = null;
     let thinkingActive = false;
     let thinkingWrapper = null;
@@ -199,8 +199,9 @@
     
       const message = {
         user_query: userMessage,
-        limit: 3,
-        require_ip: false
+        ip: userIpInfo,
+        type: "init",
+        require_ip: True
       };
       socket.send(JSON.stringify(message));
     
