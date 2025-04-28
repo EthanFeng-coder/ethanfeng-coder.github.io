@@ -65,30 +65,34 @@
     let thinkingWrapper = null;
     let thinkingText = null;
     let userIpInfo = null;
-    fetch('https://ipinfo.io/json?token=8841c2af2bcc80')
-    .then(response => response.json())
-    .then(data => {
-      userIpInfo = data.ip;
-      //console.log("🌐 IP Info:", userIpInfo);
+    let socketReady = false;
+    socket.onopen = function() {
+      socketReady = true;
+      console.log("✅ Connected to WebSocket server");
+    };
 
-      // Send IP Info to server as the first WebSocket message
+    fetch('https://ipinfo.io/json?token=8841c2af2bcc80')
+  .then(response => response.json())
+  .then(data => {
+    userIpInfo = data.ip;
+    console.log("🌐 IP Info fetched:", userIpInfo);
+
+    if (socketReady) {
       socket.send(JSON.stringify({
         type: "init",
         ip: userIpInfo
       }));
-    })
-    .catch(error => {
-      console.error("⚠️ Failed to fetch IP info:", error);
-    });
+    }
+  })
+  .catch(error => {
+    console.error("⚠️ Failed to fetch IP info:", error);
+  });
 
-    socket.onopen = function() {
-      console.log("✅ Connected to WebSocket server");
-    };
     let botMarkdownBuffer = "";
 
     
     socket.onmessage = function(event) {
-    console.log("Server:", event.data);
+    //console.log("Server:", event.data);
 
   if (event.data === "[DONE]") {
     if (currentBotBubble && botMarkdownBuffer) {
