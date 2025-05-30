@@ -15,32 +15,36 @@
     <div class="absolute inset-0 bg-[url('img/chatbg.png')] bg-cover bg-center bg-fixed opacity-80"></div>
     <div id="chatbox" class="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
       <!-- Messages will appear here -->
-      <div id="suggestions" class="flex flex-col items-center justify-center space-y-3 text-gray-600 mt-10">
-        <div class="text-lg font-semibold mb-4 flex items-center space-x-2  text-white">
-          <span>💬</span><span>Example Questions</span>
+      <div id="chatbox" class="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Messages will appear here -->
+        <div id="suggestions" class="flex flex-col items-center justify-center space-y-3 text-gray-600 mt-10 hidden">
+          <div class="text-lg font-semibold mb-4 flex items-center space-x-2  text-white">
+            <span>💬</span><span>Example Questions</span>
+          </div>
+          <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
+            Tell me about House Stark
+          </button>
+          <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
+            What is the history of the Targaryens?
+          </button>
+          <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
+            Explain the Wall and the Night's Watch
+          </button>
+          <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
+            Who were the leaders of the major houses during the War of the Five Kings?
+          </button>
+          <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
+            Summarize Robert's Rebellion
+          </button>
         </div>
-        <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
-          Tell me about House Stark
-        </button>
-        <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
-          What is the history of the Targaryens?
-        </button>
-        <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
-          Explain the Wall and the Night's Watch
-        </button>
-        <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
-          Who were the leaders of the major houses during the War of the Five Kings?
-        </button>
-        <button class="suggest-btn hover:bg-gray-200 hover:shadow px-4 py-2 rounded-md transition">
-          Summarize Robert's Rebellion
-        </button>
       </div>
+      
       
     </div>
 
     <div class="relative z-10 flex items-center p-2 border-t bg-white/80">
-      <input id="user-input" type="text" placeholder="Type a message..." class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300">
-      <button id="send-btn" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+      <input id="user-input" type="text" placeholder="Type a message..." class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300" disabled>
+      <button id="send-btn" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center space-x-2" disabled>
         <span id="send-btn-text">Send</span>
         <svg id="send-btn-loading" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -68,6 +72,9 @@
     let socketReady = false;
     socket.onopen = function() {
       socketReady = true;
+      document.getElementById('user-input').disabled = false; // Enable input field
+      document.getElementById('send-btn').disabled = false; // Enable send button
+      document.getElementById('suggestions').classList.remove('hidden'); // Show suggestions when socket is ready
       console.log("✅ Connected to WebSocket server");
     };
 
