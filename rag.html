@@ -72,9 +72,16 @@
     let socketReady = false;
     socket.onopen = function() {
       socketReady = true;
-      document.getElementById('user-input').disabled = false; // Enable input field
-      document.getElementById('send-btn').disabled = false; // Enable send button
-      document.getElementById('suggestions').classList.remove('hidden'); // Show suggestions when socket is ready
+      // Send IP info if already fetched
+      if (userIpInfo) {
+        socket.send(JSON.stringify({
+          user_query: "[INIT]",  // Adding required field
+          ip: userIpInfo
+        }));
+      }
+      document.getElementById('user-input').disabled = false;
+      document.getElementById('send-btn').disabled = false;
+      document.getElementById('suggestions').classList.remove('hidden');
       console.log("✅ Connected to WebSocket server");
     };
 
@@ -83,10 +90,10 @@
   .then(data => {
     userIpInfo = data.ip;
     console.log("🌐 IP Info fetched:", userIpInfo);
-
+    
     if (socketReady) {
       socket.send(JSON.stringify({
-        type: "init",
+        user_query: "[INIT]",  // Adding required field
         ip: userIpInfo
       }));
     }
